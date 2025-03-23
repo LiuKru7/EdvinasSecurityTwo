@@ -27,27 +27,29 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFiler;
     private final AuthenticationProvider authenticationProvider;
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {  // Configures the security filter chain
-    http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable)  // Disables CSRF protection (common for REST APIs)
-            .authorizeHttpRequests(auth -> auth  // Starts request authorization configuration
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/h2-console/**").permitAll()
-//                    .requestMatchers("/api/carparts/user/**").hasAnyRole(Role.USER.toString(), Role.ADMIN.toString())
-                    .anyRequest().authenticated()  // Requires authentication for all other requests
-            )  // Ends authorization configuration
-            .sessionManagement(session -> session
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .httpBasic(Customizer.withDefaults())
-            .authenticationProvider(authenticationProvider)  // Sets the authentication provider
-            .addFilterBefore(jwtAuthFiler, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {  // Configures the security filter chain
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)  // Disables CSRF protection (common for REST APIs)
+                .authorizeHttpRequests(auth -> auth  // Starts request authorization configuration
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/api/carparts/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
+                        .requestMatchers("/api/carparts/admin/**").hasRole("ROLE_ADMIN")
+                        .anyRequest().authenticated()  // Requires authentication for all other requests
+                )  // Ends authorization configuration
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(Customizer.withDefaults())
+                .authenticationProvider(authenticationProvider)  // Sets the authentication provider
+                .addFilterBefore(jwtAuthFiler, UsernamePasswordAuthenticationFilter.class);
 
-    http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));// Adds JWT filter before the standard username/password filter
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));// Adds JWT filter before the standard username/password filter
 
-    return http.build();  // Builds and returns the configured security filter chain
-}
+        return http.build();  // Builds and returns the configured security filter chain
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

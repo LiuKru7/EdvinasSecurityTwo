@@ -17,4 +17,7 @@ public class CarPartService {
         return carPartRepository.findAll();
     }
 
+    public CarPart addNewCarPart(CarPart carPart) {
+        return carPartRepository.save(carPart);
+    }
 }

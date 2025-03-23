@@ -30,7 +30,7 @@ public class AuthenticationService {
         var user = User.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         repository.save(user);

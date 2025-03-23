@@ -4,9 +4,7 @@ import com.liu.EdvinasSecurityTwo.carParts.model.CarPart;
 import com.liu.EdvinasSecurityTwo.carParts.service.CarPartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,11 @@ public class CarPartController {
     @GetMapping("/user")
     public ResponseEntity<List<CarPart>> getAllCarParts() {
         return ResponseEntity.ok(carPartService.getAllCarParts());
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<CarPart> addNewCarPart(@RequestBody CarPart carPart) {
+        return ResponseEntity.ok(carPartService.addNewCarPart(carPart));
     }
 
 
