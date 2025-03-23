@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/carparts/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
-                        .requestMatchers("/api/carparts/admin/**").hasRole("ROLE_ADMIN")
+                        .requestMatchers("/api/carparts/admin/**").hasAnyAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()  // Requires authentication for all other requests
                 )  // Ends authorization configuration
                 .sessionManagement(session -> session
