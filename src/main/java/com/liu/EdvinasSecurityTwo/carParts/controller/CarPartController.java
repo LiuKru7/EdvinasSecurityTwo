@@ -27,5 +27,14 @@ public class CarPartController {
         return ResponseEntity.ok(request.carPart());
     }
 
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<?> updateCarPart(@RequestBody CarPartRequest request, @PathVariable Long id) {
+        return null;
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<?> deleteCarPart(@PathVariable Long id) {
+        return null;
+    }
 
 }
