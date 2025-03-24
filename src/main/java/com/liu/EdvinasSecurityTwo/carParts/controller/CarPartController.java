@@ -1,5 +1,6 @@
 package com.liu.EdvinasSecurityTwo.carParts.controller;
 
+import com.liu.EdvinasSecurityTwo.carParts.dto.CarPartRequest;
 import com.liu.EdvinasSecurityTwo.carParts.model.CarPart;
 import com.liu.EdvinasSecurityTwo.carParts.service.CarPartService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,9 @@ public class CarPartController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<CarPart> addNewCarPart(@RequestBody CarPart carPart) {
-        return ResponseEntity.ok(carPartService.addNewCarPart(carPart));
+    public ResponseEntity<?> addNewCarPart(@RequestBody CarPartRequest request)  {
+        carPartService.addNewCarPart(request);
+        return ResponseEntity.ok(request.carPart());
     }
 
 

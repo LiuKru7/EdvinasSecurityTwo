@@ -25,7 +25,12 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public String register(RegisterRequest request) {
+
+        var userIsExist = repository.findByUsername(request.username());
+        if (userIsExist.isPresent()) {
+            return "Registration error: Username already exists";
+        }
 
         var user = User.builder()
                 .username(request.username())
@@ -34,10 +39,8 @@ public class AuthenticationService {
                 .build();
 
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
 
-        return new AuthenticationResponse(jwtToken);
-
+        return "You have successfully registered";
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -54,6 +57,5 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
 
         return new AuthenticationResponse(jwtToken);
-
     }
 }

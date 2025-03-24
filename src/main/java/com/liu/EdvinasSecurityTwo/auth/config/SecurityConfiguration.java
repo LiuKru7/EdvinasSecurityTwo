@@ -37,17 +37,18 @@ public class SecurityConfiguration {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/carparts/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                         .requestMatchers("/api/carparts/admin/**").hasAnyAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated()  // Requires authentication for all other requests
-                )  // Ends authorization configuration
+                        .requestMatchers("/api/supplier/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
-                .authenticationProvider(authenticationProvider)  // Sets the authentication provider
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFiler, UsernamePasswordAuthenticationFilter.class);
 
         http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));// Adds JWT filter before the standard username/password filter
 
-        return http.build();  // Builds and returns the configured security filter chain
+        return http.build();
     }
 
     @Bean
