@@ -27,7 +27,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSupplier(
+    public ResponseEntity<SupplierResponse> updateSupplier(
             @RequestBody SupplierRequest request,
             @PathVariable Long id
     ) {
@@ -36,6 +36,7 @@ public class SupplierController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSupplier(@PathVariable Long id) {
-        return ResponseEntity.ok(supplierService.deleteSupplier(id));
+        supplierService.deleteSupplier(id);
+        return ResponseEntity.accepted().build();
     }
 }

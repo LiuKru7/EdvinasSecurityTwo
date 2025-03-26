@@ -4,10 +4,10 @@ import com.liu.EdvinasSecurityTwo.carParts.dto.SupplierRequest;
 import com.liu.EdvinasSecurityTwo.carParts.dto.SupplierResponse;
 import com.liu.EdvinasSecurityTwo.carParts.mapper.SupplierMapper;
 import com.liu.EdvinasSecurityTwo.carParts.repository.SupplierRepository;
+import com.liu.EdvinasSecurityTwo.exceptions.SupplierNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.List;
 
 @Service
@@ -24,14 +24,26 @@ public class SupplierService {
     }
 
     public SupplierResponse addSupplier(SupplierRequest request) {
-        return null;
+        var supplier = supplierMapper.SupplierRequestToSupplier(request);
+        return supplierMapper.SupplierToSupplierResponse(supplierRepository.save(supplier));
     }
 
-    public String updateSupplier(SupplierRequest request, Long id) {
-        return "String";
+    public SupplierResponse updateSupplier(SupplierRequest request, Long id) {
+        var supplier = supplierRepository.findById(id)
+                .orElseThrow(()-> new SupplierNotFoundException("Supplier with id: " + id + " was not found"));
+
+        if (request.email() != null && !request.email().isBlank()) {
+            supplier.setEmail(request.email());
+        }
+        if (request.address() != null && !request.address().isEmpty()) {
+            supplier.setAddress(request.address());
+        }
+        return supplierMapper.SupplierToSupplierResponse(supplierRepository.save(supplier));
     }
 
-    public Object deleteSupplier(Long id) {
-        return null;
+    public void deleteSupplier(Long id) {
+        supplierRepository.findById(id)
+                .orElseThrow(()-> new SupplierNotFoundException("Supplier with id: " + id + " was not found"));
+        supplierRepository.deleteById(id);
     }
 }

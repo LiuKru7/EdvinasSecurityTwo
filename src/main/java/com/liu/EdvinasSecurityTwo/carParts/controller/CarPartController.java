@@ -1,6 +1,7 @@
 package com.liu.EdvinasSecurityTwo.carParts.controller;
 
 import com.liu.EdvinasSecurityTwo.carParts.dto.CarPartRequest;
+import com.liu.EdvinasSecurityTwo.carParts.dto.CarPartResponse;
 import com.liu.EdvinasSecurityTwo.carParts.model.CarPart;
 import com.liu.EdvinasSecurityTwo.carParts.service.CarPartService;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,15 @@ public class CarPartController {
     }
 
     @PutMapping("/admin/{id}")
-    public ResponseEntity<?> updateCarPart(@RequestBody CarPartRequest request, @PathVariable Long id) {
-        return null;
+    public ResponseEntity<CarPartResponse> updateCarPart(@RequestBody CarPartRequest request, @PathVariable Long id) {
+        return ResponseEntity.ok(carPartService.updateCarPart(request,id));
+
     }
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<?> deleteCarPart(@PathVariable Long id) {
-        return null;
+    public ResponseEntity<?> deleteCarPartById(@PathVariable Long id) {
+        carPartService.deleteCarPartById(id);
+        return ResponseEntity.accepted().build();
     }
 
 }

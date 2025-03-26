@@ -1,6 +1,7 @@
 package com.liu.EdvinasSecurityTwo.exceptions.handler;
 
-import com.liu.EdvinasSecurityTwo.exceptions.CustomException;
+import com.liu.EdvinasSecurityTwo.exceptions.CarPartNotFoundException;
+import com.liu.EdvinasSecurityTwo.exceptions.SupplierNotFoundException;
 import com.liu.EdvinasSecurityTwo.exceptions.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +13,23 @@ import java.sql.Timestamp;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handlerCustomException (CustomException exception){
+    public ResponseEntity<ErrorResponse> handlerCarPartNotFoundException (CarPartNotFoundException exception){
         ErrorResponse errorResponse = new ErrorResponse(
                 new Timestamp(System.currentTimeMillis()),
                 exception.getMessage(),
-                HttpStatus.BAD_REQUEST.value()
+                HttpStatus.NOT_FOUND.value()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handlerSupplierNotFoundException (SupplierNotFoundException exception){
+        ErrorResponse errorResponse = new ErrorResponse(
+                new Timestamp(System.currentTimeMillis()),
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND.value()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 }
